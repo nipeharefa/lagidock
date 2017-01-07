@@ -1,0 +1,95 @@
+version: '2'
+
+services:
+
+  applications:
+    image: tianon/true
+    volumes:
+        - ../:/var/www
+
+
+### Nginx Container ########################################
+  nginx:
+    build: ./nginx
+    
+    ports:
+        - "80:80"
+        - "443:443"
+
+    volumes_from:
+            - applications
+    volumes:
+      - ./logs/nginx/:/var/log/nginx
+      - ./nginx/sites/:/etc/nginx/sites-available
+
+### MySQL Container #########################################
+
+  mysql:
+      build: 
+          context: ./mysql
+          args:
+              - MYSQL_DATABASE=homestead
+              - MYSQL_USER=homestead
+              - MYSQL_PASSWORD=secret
+              - MYSQL_ROOT_PASSWORD=root
+      volumes:
+          - mysql:/var/lib/mysql
+      ports:
+          - "3306:3306"
+
+### NodeJS Container ########################################
+
+  nodeserver:
+    build: 
+      context: ./node
+    ports:
+        - "6001:6001"
+        - "3000:3000"
+    volumes_from:
+            - applications
+    volumes:
+      - "./app:/src/app"
+    tty: true
+    links: 
+      - redis
+
+### Redis Container #########################################
+
+
+  redis:
+    build: ./redis
+    volumes:
+        - redis:/data
+    ports:
+        - "6379:6379"
+    extra_hosts:
+      - "dockerhost:10.0.75.200"
+
+### phpMyAdmin Container ####################################
+
+  phpmyadmin:
+      build: ./phpmyadmin
+      environment:
+          PMA_ARBITRARY: 1
+          MYSQL_USER: homestead
+          MYSQL_PASSWORD: secret
+          MYSQL_ROOT_PASSWORD: root
+      ports:
+          - "8080:80"
+      links:
+          # for mysql container
+          - "mysql:db"
+          # for mariadb container
+          # - "mariadb:db"
+
+### Volumes Setup ###########################################
+
+volumes:
+  redis:
+      driver: "local"
+  mysql:
+      driver: "local"
+  phpmyadmin:
+      driver: "local"
+  sessions:
+      driver: "local"

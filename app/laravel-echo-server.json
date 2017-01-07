@@ -1,0 +1,24 @@
+{
+    "appKey": "ohgc8esadg9bic6je36j515a8gepm06cjk799k9sru3m6k5cclptkg50npmr",
+    "authHost": "http://jaxa.dev",
+    "authEndpoint": "/broadcasting/auth",
+    "database": "redis",
+    "databaseConfig": {
+        "redis": {
+            "host": "172.17.0.2",
+            "port": 6379
+        }
+    },
+    "devMode": true,
+    "host": "jaxa.dev",
+    "port": "6001",
+    "referrers": [
+        {
+            "host": "jaxa.dev",
+            "apiKey": "re8c9je5rmgeqshcj6kq40kppkmh5kcrd3kftu7hji0bag0kjjsc3sljte7r"
+        }
+    ],
+    "socketio": {},
+    "sslCertPath": "",
+    "sslKeyPath": ""
+}
