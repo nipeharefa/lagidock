@@ -18,9 +18,10 @@ RUN apt update && apt install yarn -y
 RUN npm install -g laravel-echo-server
 RUN npm install -g pm2
 
-
 # Define working directory.
 WORKDIR /var/www
+
+ENV REDIS=${redis}
 
 EXPOSE 3000
 EXPOSE 6001

@@ -6,8 +6,8 @@ RUN apt update -y && apt install curl vim git -y
 # Install NodeJS and Yarn
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash  && apt-get install -y nodejs
 
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
-
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 # Add the "PHP 7" ppa
 RUN apt-get install -y software-properties-common && \

@@ -68,6 +68,7 @@ services:
     tty: true
     links: 
       - redis
+      - "mongo"
 
 ### MongoDB Container #######################################
 
