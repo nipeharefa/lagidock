@@ -8,14 +8,30 @@ services:
         - ../:/var/www
 
 
+### Workspace Utilities Container ###########################
+
+  workspace:
+      build:
+          context: ./workspace
+      volumes_from:
+          - applications
+      extra_hosts:
+          - "dockerhost:10.0.75.1"
+      ports:
+         - "2222:22"
+      tty: true
 ### Nginx Container ########################################
+
   nginx:
-    build: ./nginx
-    
+    build:
+      context: ./nginx
+      args:
+          - PHP_UPSTREAM=php-fpm
     ports:
         - "80:80"
         - "443:443"
-
+    links:
+      - php-fpm
     volumes_from:
             - applications
     volumes:
@@ -26,12 +42,12 @@ services:
 
   mysql:
       build: 
-          context: ./mysql
-          args:
-              - MYSQL_DATABASE=homestead
-              - MYSQL_USER=homestead
-              - MYSQL_PASSWORD=secret
-              - MYSQL_ROOT_PASSWORD=root
+        context: ./mysql
+        args:
+            - MYSQL_DATABASE=homestead
+            - MYSQL_USER=homestead
+            - MYSQL_PASSWORD=secret
+            - MYSQL_ROOT_PASSWORD=root
       volumes:
           - mysql:/var/lib/mysql
       ports:
@@ -52,6 +68,15 @@ services:
     tty: true
     links: 
       - redis
+
+### MongoDB Container #######################################
+
+  mongo:
+      build: ./mongo
+      ports:
+          - "27017:27017"
+      volumes:
+          - mongo:/data/db
 
 ### Redis Container #########################################
 
@@ -77,10 +102,22 @@ services:
       ports:
           - "8080:80"
       links:
-          # for mysql container
           - "mysql:db"
-          # for mariadb container
-          # - "mariadb:db"
+### PHP-FPM Container #######################################
+
+  php-fpm:
+    build:
+        context: ./php-fpm
+    volumes_from:
+        - applications
+    expose:
+        - "9000"
+    extra_hosts:
+        # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
+        - "dockerhost:10.0.75.1"
+    environment:
+        # IMPORTANT: Set the Remote Interpreter entry matching name to `laravel`
+        - PHP_IDE_CONFIG=serverName=tukada
 
 ### Volumes Setup ###########################################
 
@@ -90,6 +127,8 @@ volumes:
   mysql:
       driver: "local"
   phpmyadmin:
+      driver: "local"
+  mongo:
       driver: "local"
   sessions:
       driver: "local"

@@ -9,7 +9,11 @@ RUN apt-get install -y nginx
 
 ADD nginx.conf /etc/nginx/
 
-# RUN adduser -D -H -u 1000 -s /bin/bash www-data
+# GET Arguments
+ARG PHP_UPSTREAM=php-fpm
+ARG PHPMYADMIN=phpmyadmin
+
+RUN echo "upstream php-upstream { server ${PHP_UPSTREAM}:9000; }" > /etc/nginx/conf.d/upstream.conf
 
 # Define working directory.
 WORKDIR /etc/nginx
