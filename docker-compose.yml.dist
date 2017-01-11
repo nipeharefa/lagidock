@@ -20,6 +20,18 @@ services:
       ports:
          - "2222:22"
       tty: true
+
+### Elasticsearch Utilities Container ###########################
+
+  elasticsearch:
+      build:
+          context: ./elasticsearch
+      volumes:
+        - elasticsearch-data:/usr/share/elasticsearch/data
+        - elasticsearch-plugins:/usr/share/elasticsearch/data
+      links:
+        - php-fpm
+
 ### Nginx Container ########################################
 
   nginx:
@@ -133,4 +145,8 @@ volumes:
   mongo:
       driver: "local"
   sessions:
+      driver: "local"
+  elasticsearch-data:
+      driver: "local"
+  elasticsearch-plugins:
       driver: "local"

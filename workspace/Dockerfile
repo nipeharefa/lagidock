@@ -63,3 +63,14 @@ RUN curl -s http://getcomposer.org/installer | php && \
 USER root
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install Imagick.
+RUN apt update && apt-get install -y \
+    libmagickwand-dev
+
+RUN apt install -y --force-yes php-dev
+RUN pecl install imagick
+
+USER root
+
+RUN apt install php-imagick
