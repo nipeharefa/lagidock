@@ -21,16 +21,45 @@ services:
          - "2222:22"
       tty: true
 
+### Rails Container ###########################
+  mariadb:
+    build:
+        context: ./mariadb
+    volumes_from:
+        - applications
+    ports:
+       - "3306:3306"
+    links: 
+      - workspace
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+
+### Rails Container ###########################
+
+  rails:
+    build:
+        context: ./rails
+    volumes_from:
+        - applications
+    ports:
+       - "3009:3000"
+    tty: true
+    links: 
+      - workspace
+
 ### Elasticsearch Utilities Container ###########################
 
   elasticsearch:
-      build:
-          context: ./elasticsearch
-      volumes:
-        - elasticsearch-data:/usr/share/elasticsearch/data
-        - elasticsearch-plugins:/usr/share/elasticsearch/data
-      links:
-        - php-fpm
+    build:
+        context: ./elasticsearch
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+      - elasticsearch-plugins:/usr/share/elasticsearch/data
+    links:
+      - php-fpm
 
 ### Nginx Container ########################################
 
@@ -44,9 +73,9 @@ services:
         - "443:443"
     links:
       - php-fpm
-      - "mysql:mysqldb"
+      - workspace
     volumes_from:
-            - applications
+      - applications
     volumes:
       - ./logs/nginx/:/var/log/nginx
       - ./nginx/sites/:/etc/nginx/sites-available
@@ -137,6 +166,8 @@ services:
 
 volumes:
   redis:
+      driver: "local"
+  rails:
       driver: "local"
   mysql:
       driver: "local"
