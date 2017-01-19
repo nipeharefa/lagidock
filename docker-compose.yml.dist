@@ -145,7 +145,7 @@ services:
       ports:
           - "8080:80"
       links:
-          - "mysql:db"
+          - "mariadb:db"
 ### PHP-FPM Container #######################################
 
   php-fpm:
