@@ -66,8 +66,8 @@ RUN docker-php-ext-enable imagick
 #--------------------------------------------------------------------------
 #
 
-# ADD ./laravel.ini /usr/local/etc/php/conf.d
-# ADD ./laravel.pool.conf /usr/local/etc/php-fpm.d/
+ADD ./laravel.ini /usr/local/etc/php/conf.d
+ADD ./laravel.pool.conf /usr/local/etc/php-fpm.d/
 
 RUN rm -r /var/lib/apt/lists/*
 

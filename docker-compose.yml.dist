@@ -58,8 +58,6 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
       - elasticsearch-plugins:/usr/share/elasticsearch/data
-    links:
-      - php-fpm
 
 ### Nginx Container ########################################
 
@@ -71,6 +69,8 @@ services:
     ports:
         - "80:80"
         - "443:443"
+        - "8880:8880"
+        - "8443:8443"
     links:
       - php-fpm
       - workspace
@@ -133,6 +133,18 @@ services:
     extra_hosts:
       - "dockerhost:10.0.75.200"
 
+### Minio Container #########################################
+
+  minio:
+      build: ./minio
+      volumes:
+          - minio:/export
+      ports:
+        - "9000:9000"
+      environment:
+        MINIO_ACCESS_KEY: access
+        MINIO_SECRET_KEY: secretkey
+
 ### phpMyAdmin Container ####################################
 
   phpmyadmin:
@@ -180,4 +192,6 @@ volumes:
   elasticsearch-data:
       driver: "local"
   elasticsearch-plugins:
+      driver: "local"
+  minio:
       driver: "local"
