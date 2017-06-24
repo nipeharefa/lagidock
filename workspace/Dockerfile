@@ -1,6 +1,10 @@
 FROM ubuntu:16.04
 
-RUN apt update -y && apt install curl vim git -y
+RUN apt-get clean && apt-get update
+RUN apt-get install locales curl vim git -y
+RUN locale-gen en_US.UTF-8
+
+# RUN apt install curl vim git -y
 
 
 # Install NodeJS and Yarn

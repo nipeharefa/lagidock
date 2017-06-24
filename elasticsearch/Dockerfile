@@ -1,4 +1,4 @@
-FROM elasticsearch:latest
+FROM docker.elastic.co/elasticsearch/elasticsearch
 
 MAINTAINER Bo-Yi Wu <appleboy.tw@gmail.com>
 
